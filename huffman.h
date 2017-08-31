@@ -14,30 +14,27 @@
 using namespace std;
 
 struct HNode
-	{
-		HNode *left;
-		HNode *right;
-		unsigned int frecv;
-		unsigned char chr;
-		HNode()
-		{
+{
+		  HNode *left;
+	  	HNode *right;
+	  	unsigned int frecv;
+		  unsigned char chr;
 
-			frecv = 0;
-			chr = 0;
-			left = nullptr;
-			right = nullptr;
-		}
+		  HNode()
+		  {
+			  frecv = 0;
+			  chr = 0;
+			  left = nullptr;
+			  right = nullptr;
+		  }
 		
-		HNode(HNode* p)
-		{
-			this->left = p->left;
-			this->right = p->right;
-			this->frecv = p->frecv;
-			this->chr = p->chr;
-			
-		}
-		
-		
+		  HNode(HNode* p)
+		  {
+			  this->left = p->left;
+			  this->right = p->right;
+			  this->frecv = p->frecv;
+			  this->chr = p->chr;
+		  }
 
 		~HNode()
 		{
@@ -92,10 +89,10 @@ struct HNode
 
 		friend ostream& operator<<(ostream& ost, const HNode& nod)
 		{
-			if (&nod != NULL)
-			{
+			if (&nod != NULL){
+
 				if (nod.chr < 128 && nod.chr > 31)
-				ost << (unsigned char)nod.chr << " ---- " << nod.frecv << endl;
+            ost << (unsigned char)nod.chr << " ---- " << nod.frecv << endl;
 
 			else
 				ost << (unsigned short)nod.chr << " ---- " << nod.frecv << endl;
@@ -110,34 +107,34 @@ class HTree
 {
 	
 	
-	HNode *root;
+    HNode *root;
 
-	HTree();
-	HTree(HNode *node);
-	~HTree();
+	  HTree();
+	  HTree(HNode *node);
+	  ~HTree();
 
-	// cautam caracterul c in arbore
-	// daca  il gasim returnam true
-	// daca nu il gasim returnam false
-	static void char2EncodedStr(HNode* Node,
-		unsigned char c,
-		string rets,
-		string &buff);
+	  // cautam caracterul c in arbore
+	  // daca  il gasim returnam true
+	  // daca nu il gasim returnam false
+	  static void char2EncodedStr(HNode* Node,
+		                            unsigned char c,
+		                            string rets,
+		                            string &buff);
 
-	static int str2DecodedChar(HNode* Node,
-		string hstr,
-		unsigned char &chr);
+	  static int str2DecodedChar(HNode* Node,
+		                           string hstr,
+		                           unsigned char &chr);
 
 
-	static void write_huff_char(unsigned char bit, ofstream& ost);
-	static unsigned char get_huff_bits(ifstream& hf);
+	  static void write_huff_char(unsigned char bit, ofstream& ost);
+	  static unsigned char get_huff_bits(ifstream& hf);
 	
-	void printTree();
+	  void printTree();
 
 public:
 
-	static void Hdecompresser(string infile, string outfile);
-	static void Hcompresser(string infile, string outfile);
+	  static void Hdecompresser(string infile, string outfile);
+	  static void Hcompresser(string infile, string outfile);
 
 };
 
