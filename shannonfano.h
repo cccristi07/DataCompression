@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <utility>
 #include <vector>
 #include <algorithm>
 #include <functional>
@@ -74,9 +75,8 @@ struct Node
 		right = nullptr;
 	}
 
-	Node(vector<charTuple*> hist)
-	{
-		this->char_table = hist;
+	explicit Node(vector<charTuple *> hist) {
+		this->char_table = std::move(hist);
 		left = nullptr;
 		right = nullptr;
 	}
@@ -93,33 +93,18 @@ struct Node
 		return !left && !right;
 	}
 
-	void showNode()
-	{
-	
-		for (int i = 0; i < char_table.size(); i++)
-		{
-			cout << char_table.at(i);
-		}
-		showNode(left);
-		showNode(right);
-	}
 	void showNode(Node *ptr)
 	{
 		cout << endl << endl;
 		if (ptr)
 		{
-			for (int i = 0; i < ptr->char_table.size(); i++)
-			{
-				cout << ptr->char_table.at(i);
+			for (auto &i : ptr->char_table) {
+				cout << i;
 			}
 			showNode(ptr->left);
 			showNode(ptr->right);
 		}
 	}
-	
-
-	
-
 };
 
 
@@ -141,15 +126,14 @@ class SFTree
 
 	void buildtree(Node* subtree);
 	SFTree();
-	SFTree(Node* root);
-	SFTree(vector<charTuple*> v);
-	void setLeft(Node*);
-	void setRight(Node*);
-	Node* getLeft();
-	Node* getRight();
+
+	explicit SFTree(Node *root);
+
+	explicit SFTree(vector<charTuple *> v);
+
 	Node* getRoot();
 	void buildtree();
-	void printtree();
+
 	~SFTree();
 public:
 	static void SFcompresser(string infile, string outfile);

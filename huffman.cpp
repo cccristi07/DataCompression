@@ -5,7 +5,6 @@
 
 HTree::~HTree()
 {
-
 	delete this->root;
 }
 
@@ -19,7 +18,6 @@ HTree::HTree(HNode* node)
 {
 	root = node;
 }
-
 
 
 
@@ -56,16 +54,15 @@ int HTree::str2DecodedChar(HNode* Node,
 {
 
 		// parcurgem codul Huffman si cautam caracterul
-		for (int i = 0; i < hstr.size(); i++)
-		{
+    for (char i : hstr) {
 
-			if (hstr.at(i) == '0')
+        if (i == '0')
 				Node = Node->left;
 
-			if (hstr.at(i) == '1')
+        if (i == '1')
 				Node = Node->right;
 
-			if (Node == NULL)
+        if (Node == nullptr)
 			{
 				return 0;
 			}
@@ -81,11 +78,6 @@ int HTree::str2DecodedChar(HNode* Node,
 		chr = 0;
 		return 0;
 
-}
-
-void HTree::printTree()
-{
-	this->root->print();
 }
 
 void HTree::write_huff_char(unsigned char bit, ofstream& ost)
@@ -126,12 +118,12 @@ void HTree::write_huff_char(unsigned char bit, ofstream& ost)
 unsigned char HTree::get_huff_bits(ifstream& hf)
 {
 	static int pos = 0;
-	static unsigned char ch = hf.get();
+    static auto ch = static_cast<unsigned char>(hf.get());
 
 	unsigned char bit;
 
 	// din octetul citit vrem sa obtinem bitul de pe pozitia pos
-	bit = (ch >> (7 - pos)) % 2;
+    bit = static_cast<unsigned char>((ch >> (7 - pos)) % 2);
 
 	pos++;
 	pos %= 8;
@@ -140,7 +132,7 @@ unsigned char HTree::get_huff_bits(ifstream& hf)
 	{
 		//am citit toti bitii, trecem la urmatorul octet
 		if (!hf.eof())
-			ch = hf.get();
+            ch = static_cast<unsigned char>(hf.get());
 		else
 			bit = 2; // daca am ajuns la sfarsit returnam EOF
 	}
@@ -208,11 +200,11 @@ void HTree::Hdecompresser(string infile, string outfile)
 		f_in.read(&car, 1);
 		f_in.read(buff, 4);
 		f = 0;
-		ch_write = car;
+        ch_write = static_cast<unsigned char>(car);
 		unsigned char unu = 1;
 		for (int j = 0; j < 4; j++)
 		{
-			f += (unsigned char)(buff[j])*((unsigned char)unu << (24 - 8 * j));
+            f += (unsigned char) (buff[j]) * (unu << (24 - 8 * j));
 			
 		}
 
@@ -227,22 +219,22 @@ void HTree::Hdecompresser(string infile, string outfile)
 
 	for (int i = 0; i < 256; i++)
 	{
-		if (freq.at(i))
+        if (freq.at(static_cast<unsigned long>(i)))
 		{
 			//cout << freq.at(i) << endl;
 			// creem nodul si il introducem in heap
-			HNode *nod = new HNode;
-			nod->frecv = freq.at(i);
+            auto *nod = new HNode;
+            nod->frecv = static_cast<unsigned int>(freq.at(i));
 			nod->chr = (unsigned char)i;
 			q.push(nod);
 		}
 	}
 
 
-	int heap_size = q.size();
+    auto heap_size = static_cast<int>(q.size());
 	for (int i = 0; i < heap_size - 1; i++)
 	{
-		HNode *z = new HNode;
+        auto *z = new HNode;
 		z->left = q.top();
 		q.pop();
 		z->right = q.top();
@@ -253,12 +245,11 @@ void HTree::Hdecompresser(string infile, string outfile)
 
 	HNode *root = q.top();
 
-	HTree *tree = new HTree(root);
-	//cout << root->frecv << endl;
+
 	// in acest punct avem arborele huffman reconstruit
 	
 	// citim in continuare din fisier octeti si ii decodam
-	string huff_str = "";
+    string huff_str;
 	car = 0;
 	unsigned char car_w = 0;
 	int ok = 0;
@@ -341,12 +332,11 @@ void HTree::Hcompresser(string infile, string outfile)
 	f_in.clear();
 	f_in.seekg(0);
 	//  histograma
-	
 
 
-	for (int i = 0; i < buffer.size(); i++)
-	{
-		freq[(unsigned char)buffer[i]]++;
+
+    for (char i : buffer) {
+        freq[(unsigned char) i]++;
 	}
 
 
@@ -354,10 +344,10 @@ void HTree::Hcompresser(string infile, string outfile)
 	for (int i = 0; i < 256; i++)
 	{
 		// daca caracterul i a aparut
-		if (freq.at(i) != 0)
+        if (freq.at(static_cast<unsigned long>(i)) != 0)
 		{
 			// alocam nodul
-			HNode *nod = new HNode;
+            auto *nod = new HNode;
 			nod->chr = (unsigned char)i;
 			nod->frecv = freq.at(i);
 			
@@ -367,16 +357,14 @@ void HTree::Hcompresser(string infile, string outfile)
 		}
 	}
 
-		
-	int it = 0;
 
-	int n = q.size(); // dimensiunea cozii
+    auto n = static_cast<int>(q.size()); // dimensiunea cozii
 		
 		
 	// algoritmul pentru a face arborele huffman
 	for (int i = 0; i < n - 1; i++)
 	{
-		HNode *z = new HNode;
+        auto *z = new HNode;
 		z->left = q.top();
 		q.pop();
 		z->right = q.top();
@@ -388,14 +376,7 @@ void HTree::Hcompresser(string infile, string outfile)
 	// extragem radacina arborelui huffman
 	HNode *root = q.top();
 
-	HTree *tree = new HTree(root);
-
-
-
 	string huff_str[256];
-
-	
-
 
 	for (int i = 0; i < 256; i++)
 	{
@@ -446,13 +427,12 @@ void HTree::Hcompresser(string infile, string outfile)
 
 	while (f_in.get(car))
 	{
-		ch = car;
+        ch = static_cast<unsigned char>(car);
 
-		for (int i = 0; i < huff_str[ch].size(); i++)
-		{
-			if (huff_str[ch].at(i) == '0')
+        for (char i : huff_str[ch]) {
+            if (i == '0')
 				_ch = 0;
-			if (huff_str[ch].at(i) == '1')
+            if (i == '1')
 				_ch = 1;
 
 			write_huff_char(_ch, f_out);

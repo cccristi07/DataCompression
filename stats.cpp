@@ -9,7 +9,7 @@ void print_stats(string compressed_file, string original_file)
 	FILE *orig;
 	cmp  = fopen(compressed_file.c_str(), "rb");
 	orig = fopen(original_file.c_str(), "rb");
-	if (orig == NULL || cmp == NULL)
+	if (orig == nullptr || cmp == nullptr)
 	{
 		cerr << "Eroare la deschidere" << endl;
 		exit(-1);
@@ -19,10 +19,10 @@ void print_stats(string compressed_file, string original_file)
 	fseek(cmp, 0, SEEK_END);
 	fseek(orig, 0, SEEK_END);
 
-	unsigned long long size_comp = ftell(cmp);
-	unsigned long long size_orig = ftell(orig);
-	
-	double comp_rate = size_orig != 0 ? (1.0 - (double)size_comp / (double)size_orig) : -1e20;
+	auto size_comp = static_cast<unsigned long long int>(ftell(cmp));
+	auto size_orig = static_cast<unsigned long long int>(ftell(orig));
+
+	auto comp_rate = size_orig != 0 ? (1.0 - (double) size_comp / (double) size_orig) : -1e20;
 
 
 	double show_comp = size_comp;
@@ -41,8 +41,8 @@ void print_stats(string compressed_file, string original_file)
 		cont_orig++;
 		show_orig /= 1024.0;
 	}
-	string orig_mag = "";
-	string comp_mag = ""; // pot fi B, KB, MB, GB
+	string orig_mag;
+	string comp_mag; // pot fi B, KB, MB, GB
     
         
     
