@@ -20,11 +20,12 @@ HTree::HTree(HNode* node)
 }
 
 
-
-void HTree::char2EncodedStr(HNode* Node,
-		unsigned char c,
-		string rets,
-		string &buff) 
+void HTree::char2EncodedStr(
+        HNode *Node,
+        unsigned char c,
+        string rets,
+        string &buff
+)
 {
 
 	if (Node)
