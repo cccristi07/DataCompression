@@ -25,7 +25,6 @@ Node * SFTree::getRoot()
 void SFTree::buildtree()
 {
 	vector<charTuple*> chrs = root->char_table;
-	
 
 	if (chrs.size() == 1)
 	{

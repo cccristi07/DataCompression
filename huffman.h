@@ -15,86 +15,77 @@ using namespace std;
 
 struct HNode
 {
-		  HNode *left;
-	  	HNode *right;
-	  	unsigned int frecv;
-		  unsigned char chr;
+    HNode *left;
+    HNode *right;
+    unsigned int frecv;
+    unsigned char chr;
 
-		  HNode()
-		  {
-			  frecv = 0;
-			  chr = 0;
-			  left = nullptr;
-			  right = nullptr;
-		  }
+    HNode() {
+        frecv = 0;
+        chr = 0;
+        left = nullptr;
+        right = nullptr;
+    }
 
-    explicit HNode(HNode *p)
-		  {
-			  this->left = p->left;
-			  this->right = p->right;
-			  this->frecv = p->frecv;
-			  this->chr = p->chr;
-		  }
+    explicit HNode(HNode *p) {
+        this->left = p->left;
+        this->right = p->right;
+        this->frecv = p->frecv;
+        this->chr = p->chr;
+    }
 
-		~HNode()
-		{
-			delete left;
-			delete right;
-		}
-		
-		bool operator==(const HNode *Node) const
-		{
-			return this->frecv == Node->frecv;
-		}
-		bool operator!=(const HNode *Node) const
-		{
-			return this->frecv != Node->frecv;
-		}
-		bool operator<(const HNode *Node) const
-		{
-			return this->frecv < Node->frecv;
-		}
-		bool operator>(const HNode *Node) const
-		{
-			return this->frecv > Node->frecv;
-		}
-		bool operator<=(const HNode *Node) const
-		{
-			return this->frecv <= Node->frecv;
-		}
-		bool operator>=(const HNode *Node) const
-		{
-			return this->frecv >= Node->frecv;
-		}
-		
-		void print()
-		{
-			cout << (int) chr << "   " << frecv << endl;
-			prints(left);
-			prints(right);
-			
-		}
-		
-		void prints(HNode *node)
-		{
-			if(node)
-			{
-				cout << (int) node->chr << "    " << node->frecv<<endl;
-				prints(node->left);
-				prints(node->right);
-			}
-		}
+    ~HNode() {
+        delete left;
+        delete right;
+    }
 
-	
+    bool operator==(const HNode *Node) const {
+        return this->frecv == Node->frecv;
+    }
 
-		friend ostream& operator<<(ostream& ost, const HNode& nod)
-		{
-            if (&nod != nullptr)
-                ost << (nod.chr < 128 && nod.chr > 31 ? nod.chr : (unsigned short) nod.chr) << " ---- " << nod.frecv
-                    << endl;
-			return ost;
-		}
-	};
+    bool operator!=(const HNode *Node) const {
+        return this->frecv != Node->frecv;
+    }
+
+    bool operator<(const HNode *Node) const {
+        return this->frecv < Node->frecv;
+    }
+
+    bool operator>(const HNode *Node) const {
+        return this->frecv > Node->frecv;
+    }
+
+    bool operator<=(const HNode *Node) const {
+        return this->frecv <= Node->frecv;
+    }
+
+    bool operator>=(const HNode *Node) const {
+        return this->frecv >= Node->frecv;
+    }
+
+    void print() {
+        cout << (int) chr << "   " << frecv << endl;
+        prints(left);
+        prints(right);
+
+    }
+
+    void prints(HNode *node) {
+        if (node) {
+            cout << (int) node->chr << "    " << node->frecv << endl;
+            prints(node->left);
+            prints(node->right);
+        }
+    }
+
+
+    friend ostream &operator<<(ostream &ost, const HNode &nod) {
+        if (&nod != nullptr)
+            ost << (nod.chr < 128 && nod.chr > 31 ? nod.chr : (unsigned short) nod.chr) << " ---- " << nod.frecv
+                << endl;
+        return ost;
+    }
+};
 
 
 class HTree
@@ -122,13 +113,15 @@ class HTree
     );
 
 
-	  static void write_huff_char(unsigned char bit, ofstream& ost);
-	  static unsigned char get_huff_bits(ifstream& hf);
+    static void write_huff_char(unsigned char bit, ofstream &ost);
+
+    static unsigned char get_huff_bits(ifstream &hf);
 
 public:
 
-	  static void Hdecompresser(string infile, string outfile);
-	  static void Hcompresser(string infile, string outfile);
+    static void Hdecompresser(string infile, string outfile);
+
+    static void Hcompresser(string infile, string outfile);
 
 };
 
