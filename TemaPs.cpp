@@ -1,7 +1,3 @@
-// TemaPs.cpp : Defines the entry point for the console application.
-//
-
-
 #include <iostream>
 #include "huffman.h"
 #include "shannonfano.h"
@@ -62,7 +58,7 @@ int main(int argc, char** argv)
 			}
 
         } else {
-			cout << "Incorrect arguments...exiting" << endl;
+            print_help(argv[0]);
 			exit(-4);
 		}
 

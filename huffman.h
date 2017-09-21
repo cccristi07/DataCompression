@@ -9,8 +9,6 @@
 #include <algorithm>
 #include <queue>
 
-
-
 using namespace std;
 
 struct HNode
@@ -63,13 +61,6 @@ struct HNode
         return this->frecv >= Node->frecv;
     }
 
-    void print() {
-        cout << (int) chr << "   " << frecv << endl;
-        prints(left);
-        prints(right);
-
-    }
-
     void prints(HNode *node) {
         if (node) {
             cout << (int) node->chr << "    " << node->frecv << endl;
@@ -106,16 +97,16 @@ class HTree
             string &buff
     );
 
-    static int str2DecodedChar(
+    static int decode_char(
             HNode *Node,
             string hstr,
             unsigned char &chr
     );
 
 
-    static void write_huff_char(unsigned char bit, ofstream &ost);
+    static void write_char(unsigned char bit, ofstream &ost);
 
-    static unsigned char get_huff_bits(ifstream &hf);
+    static unsigned char get_bits(ifstream &hf);
 
 public:
 

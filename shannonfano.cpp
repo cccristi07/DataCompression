@@ -82,10 +82,7 @@ void SFTree::buildtree()
 }
 
 
-void SFTree::char2EncodedStr(Node * node,
-	unsigned char c, 
-	string buff, 
-	string& retstr)
+void SFTree::char2EncodedStr(Node *node, unsigned char c, string buff, string &retstr)
 {
 	if (node)
 	{
@@ -100,7 +97,6 @@ void SFTree::char2EncodedStr(Node * node,
 			char2EncodedStr(node->left, c, buff + '0', retstr);
 			char2EncodedStr(node->right, c, buff + '1', retstr);
 		}
-
 
 	}
 	else
@@ -248,8 +244,6 @@ void SFTree::buildtree(Node * subtree)
 			}
 		}
 
-		
-
 		vector<charTuple*>::iterator fst, lst;
 
 		fst = chrs.begin();
@@ -281,20 +275,22 @@ SFTree::~SFTree()
 
 void SFTree::SFcompresser(string infile, string outfile)
 {
-	// fisierul de intrare
-	ifstream in(infile, ios::binary);
-	ofstream out(outfile, ios::binary);
-	if (!in.is_open())
+
+    ifstream f_in(infile, ios::binary);
+    ofstream f_out(outfile, ios::binary);
+
+    if (!f_in.is_open())
 	{
 		cerr << "Eroare la deschiderea fisierului" << endl;
 		exit(-2);
 	}
 
-	if (!out.is_open())
+    if (!f_out.is_open())
 	{
 		cerr << "Eroare la scrierea fisierului" << endl;
 		exit(-3);
 	}
+
 	//histograma
 	vector<unsigned int> freq(256, 0);
 
@@ -309,20 +305,16 @@ void SFTree::SFcompresser(string infile, string outfile)
 		return t1->freq > t2->freq;
 	};
 
-	
 
-	// tot ce e in fisier punem intr-un buffer
-	std::vector<char> buffer(
-		(std::istreambuf_iterator<char>(in)),
-		(std::istreambuf_iterator<char>()));
-	
-	in.clear();
-	in.seekg(0);
+    while (!f_in.eof()) {
+        unsigned char read_char;
+        f_in >> read_char;
+        freq.at(read_char)++;
+    }
 
-	// pentru fiecare caracter incrementam histograma
-    for (char i : buffer) {
-        freq.at(static_cast<unsigned char>(i))++;
-	}
+    f_in.clear();
+    f_in.seekg(0);
+
 
 	// scriem metainformatiile in fisier
 	unsigned int N = 0;
@@ -335,21 +327,21 @@ void SFTree::SFcompresser(string infile, string outfile)
 
 	// scriem numarul de simboluri ca pe bucati de 8 biti
 
-	out.put(static_cast<unsigned char>((N >> 24) % 256));
-	out.put(static_cast<unsigned char>((N >> 16) % 256));
-	out.put(static_cast<unsigned char>((N >> 8) % 256));
-	out.put(static_cast<unsigned char>(N % 256));
+    f_out.put(static_cast<unsigned char>((N >> 24) % 256));
+    f_out.put(static_cast<unsigned char>((N >> 16) % 256));
+    f_out.put(static_cast<unsigned char>((N >> 8) % 256));
+    f_out.put(static_cast<unsigned char>(N % 256));
 
 	for (int i = 0; i < 256; i++)
 	{
 		// scriem in fisier caracterul si numarul lui de aparitii
         if (freq.at(static_cast<unsigned long>(i)))
 		{
-			out.put(static_cast<unsigned char>(i));
-            out.put(static_cast<unsigned char>((freq.at(static_cast<unsigned long>(i)) >> 24) % 256));
-            out.put(static_cast<unsigned char>((freq.at(static_cast<unsigned long>(i)) >> 16) % 256));
-            out.put(static_cast<unsigned char>((freq.at(static_cast<unsigned long>(i)) >> 8) % 256));
-            out.put(static_cast<unsigned char>(freq.at(static_cast<unsigned long>(i)) % 256));
+            f_out.put(static_cast<unsigned char>(i));
+            f_out.put(static_cast<unsigned char>((freq.at(static_cast<unsigned long>(i)) >> 24) % 256));
+            f_out.put(static_cast<unsigned char>((freq.at(static_cast<unsigned long>(i)) >> 16) % 256));
+            f_out.put(static_cast<unsigned char>((freq.at(static_cast<unsigned long>(i)) >> 8) % 256));
+            f_out.put(static_cast<unsigned char>(freq.at(static_cast<unsigned long>(i)) % 256));
 		}
 	}
 
@@ -387,27 +379,47 @@ void SFTree::SFcompresser(string infile, string outfile)
 	}
 
 
-    for (char i : buffer) {
-		// pentru fiecare caracter, care se afla in buffer
-		// aflam decodificarea si o punem in fisier
-        auto pos = static_cast<unsigned char>(i);
+    while (!f_in.eof()) {
+
+        unsigned char pos;
+        f_in >> pos;
+
         for (char j : enc_str[pos]) {
-			// scriem fiecare bit din enc_str[buffer[i]]
+
             auto ch_write = static_cast<unsigned char>(j - '0');
 
-			if (ch_write == 0)
-				write_bits_to_file(out, 0);
+            if (ch_write == 0)
+                write_bits_to_file(f_out, 0);
 
-			if (ch_write == 1)
-				write_bits_to_file(out, 1);
-		}
-	}
+            if (ch_write == 1)
+                write_bits_to_file(f_out, 1);
+
+        }
+
+    }
+
+
+//    for (char i : buffer) {
+//		// pentru fiecare caracter, care se afla in buffer
+//		// aflam decodificarea si o punem in fisier
+//        auto pos = static_cast<unsigned char>(i);
+//        for (char j : enc_str[pos]) {
+//			// scriem fiecare bit din enc_str[buffer[i]]
+//            auto ch_write = static_cast<unsigned char>(j - '0');
+//
+//			if (ch_write == 0)
+//				write_bits_to_file(f_out, 0);
+//
+//			if (ch_write == 1)
+//				write_bits_to_file(f_out, 1);
+//		}
+//	}
 
 	// scriem eof
-	write_bits_to_file(out, 2);
+    write_bits_to_file(f_out, 2);
 	delete tree;
-	in.close();
-	out.close();
+    f_in.close();
+    f_out.close();
 	cout << "Done :)" << endl;
 
 }
