@@ -90,7 +90,7 @@ class HTree
 
     ~HTree();
 
-    static void char2EncodedStr(
+    static void encode_char(
             HNode *Node,
             unsigned char c,
             string rets,

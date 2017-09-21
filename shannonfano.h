@@ -112,21 +112,22 @@ class SFTree
 {
 	Node* root;
 
-    static void char2EncodedStr(
-            Node *node,
-            unsigned char c,
-            string buff,
-            string &retstr
-    );
+	static void encode_char(
+			Node *node,
+			unsigned char c,
+			string buff,
+			string &retstr
+	);
 
-    static int str2DecodedChar(
-            Node *node,
-            unsigned char &c,
-            string enc
-    );
+	static int decode_char(
+			Node *node,
+			unsigned char &c,
+			string enc
+	);
 
-	static void write_bits_to_file(ofstream& out, unsigned char c);
-	static unsigned char read_bits_from_file(ifstream& in);
+	static void write_bit(ofstream &out, unsigned char c);
+
+	static unsigned char get_bits(ifstream &in);
 
 	void buildtree(Node* subtree);
 	SFTree();

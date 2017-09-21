@@ -20,7 +20,7 @@ HTree::HTree(HNode* node)
 }
 
 
-void HTree::char2EncodedStr(
+void HTree::encode_char(
         HNode *Node,
         unsigned char c,
         string rets,
@@ -39,8 +39,8 @@ void HTree::char2EncodedStr(
 			else
 			{
 				// nu am ajuns la frunze, cautam in continuare
-				char2EncodedStr(Node->left, c, rets + '0', buff);
-				char2EncodedStr(Node->right, c, rets + '1', buff);
+                encode_char(Node->left, c, rets + '0', buff);
+                encode_char(Node->right, c, rets + '1', buff);
 
 			}
 		}
@@ -347,7 +347,7 @@ void HTree::Hcompresser(string infile, string outfile)
 
     for (int i = 0; i < 256; i++) {
 
-        char2EncodedStr(root, (unsigned char) i, "", huff_str[i]);
+        encode_char(root, (unsigned char) i, "", huff_str[i]);
 
 		int ok = huff_str[i].empty();
 

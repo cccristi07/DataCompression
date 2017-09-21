@@ -82,7 +82,7 @@ void SFTree::buildtree()
 }
 
 
-void SFTree::char2EncodedStr(Node *node, unsigned char c, string buff, string &retstr)
+void SFTree::encode_char(Node *node, unsigned char c, string buff, string &retstr)
 {
 	if (node)
 	{
@@ -94,8 +94,8 @@ void SFTree::char2EncodedStr(Node *node, unsigned char c, string buff, string &r
 		}
 		else
 		{
-			char2EncodedStr(node->left, c, buff + '0', retstr);
-			char2EncodedStr(node->right, c, buff + '1', retstr);
+            encode_char(node->left, c, buff + '0', retstr);
+            encode_char(node->right, c, buff + '1', retstr);
 		}
 
 	}
@@ -105,9 +105,9 @@ void SFTree::char2EncodedStr(Node *node, unsigned char c, string buff, string &r
 	}
 }
 
-int SFTree::str2DecodedChar(Node* node, 
-	unsigned char& c, 
-	string enc)
+int SFTree::decode_char(Node *node,
+                        unsigned char &c,
+                        string enc)
 {
 	Node * crawl = node;
 	c = 0;
@@ -149,7 +149,7 @@ int SFTree::str2DecodedChar(Node* node,
 
 }
 
-void SFTree::write_bits_to_file(ofstream & out, unsigned char c)
+void SFTree::write_bit(ofstream &out, unsigned char c)
 {
 	static int pos = 0; // pozitia la care scriem  [0 1 2 3 4 5 6 7]
 	static unsigned char byte = 0; // bitul de scris
@@ -183,7 +183,7 @@ void SFTree::write_bits_to_file(ofstream & out, unsigned char c)
 
 }
 
-unsigned char SFTree::read_bits_from_file(ifstream & in)
+unsigned char SFTree::get_bits(ifstream &in)
 {
 	static int pos = 0; // returnam bitii de pe pozitia pos [0 1 2 3 4 5 6 7]
     static auto byte = static_cast<unsigned char>(in.get());
@@ -326,7 +326,6 @@ void SFTree::SFcompresser(string infile, string outfile)
 	}
 
 	// scriem numarul de simboluri ca pe bucati de 8 biti
-
     f_out.put(static_cast<unsigned char>((N >> 24) % 256));
     f_out.put(static_cast<unsigned char>((N >> 16) % 256));
     f_out.put(static_cast<unsigned char>((N >> 8) % 256));
@@ -372,10 +371,10 @@ void SFTree::SFcompresser(string infile, string outfile)
 
 	for (int i = 0; i < 256; i++)
 	{
-		char2EncodedStr(tree->getRoot(),
-			static_cast<unsigned char>(i),
-			"",
-			enc_str[i]);
+        encode_char(tree->getRoot(),
+                    static_cast<unsigned char>(i),
+                    "",
+                    enc_str[i]);
 	}
 
 
@@ -389,34 +388,16 @@ void SFTree::SFcompresser(string infile, string outfile)
             auto ch_write = static_cast<unsigned char>(j - '0');
 
             if (ch_write == 0)
-                write_bits_to_file(f_out, 0);
+                write_bit(f_out, 0);
 
             if (ch_write == 1)
-                write_bits_to_file(f_out, 1);
+                write_bit(f_out, 1);
 
         }
 
     }
 
-
-//    for (char i : buffer) {
-//		// pentru fiecare caracter, care se afla in buffer
-//		// aflam decodificarea si o punem in fisier
-//        auto pos = static_cast<unsigned char>(i);
-//        for (char j : enc_str[pos]) {
-//			// scriem fiecare bit din enc_str[buffer[i]]
-//            auto ch_write = static_cast<unsigned char>(j - '0');
-//
-//			if (ch_write == 0)
-//				write_bits_to_file(f_out, 0);
-//
-//			if (ch_write == 1)
-//				write_bits_to_file(f_out, 1);
-//		}
-//	}
-
-	// scriem eof
-    write_bits_to_file(f_out, 2);
+    write_bit(f_out, 2);
 	delete tree;
     f_in.close();
     f_out.close();
@@ -513,7 +494,7 @@ void SFTree::SFdecompresser(string infile, string outfile)
         string str;
 		do
 		{
-			c_build = read_bits_from_file(in);
+            c_build = get_bits(in);
 
 			if (c_build == 0)
 				str += '0';
@@ -526,7 +507,7 @@ void SFTree::SFdecompresser(string infile, string outfile)
 				ch_write = 0;
 				break;
 			}
-			ok = str2DecodedChar(tree->getRoot(), ch_write, str);
+            ok = decode_char(tree->getRoot(), ch_write, str);
 
 		} while (!ok);
 
