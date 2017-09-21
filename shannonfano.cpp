@@ -338,6 +338,10 @@ void SFTree::SFcompresser(string infile, string outfile) {
     }
 
     write_bit(f_out, 2);
+
+    for (auto x : tabela)
+        delete x;
+
     delete tree;
     f_in.close();
     f_out.close();
@@ -443,6 +447,8 @@ void SFTree::SFdecompresser(string infile, string outfile) {
         out.put(static_cast<char>(ch_write));
     }
 
+    for (auto i : read_table)
+        delete i;
 
     delete tree;
     read_table.clear();
