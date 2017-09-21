@@ -11,8 +11,7 @@
 
 using namespace std;
 
-struct HNode
-{
+struct HNode {
     HNode *left;
     HNode *right;
     unsigned int frecv;
@@ -79,8 +78,7 @@ struct HNode
 };
 
 
-class HTree
-{
+class HTree {
 
     HNode *root;
 
