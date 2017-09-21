@@ -95,28 +95,29 @@ struct Node {
 
 
 class SFTree {
+
+
     Node *root;
 
-    static void encode_char(
+    void encode_char(
             Node *node,
             unsigned char c,
             string buff,
             string &retstr
     );
 
-    static int decode_char(
+    int decode_char(
             Node *node,
             unsigned char &c,
             string enc
     );
 
-    static void write_bit(ofstream &out, unsigned char c);
+    void write_bit(ofstream &out, unsigned char c);
 
-    static unsigned char get_bits(ifstream &in);
+    unsigned char get_bits(ifstream &in);
 
     void buildtree(Node *subtree);
 
-    SFTree();
 
     explicit SFTree(Node *root);
 
@@ -126,12 +127,16 @@ class SFTree {
 
     void buildtree();
 
-    ~SFTree();
 
 public:
-    static void SFcompresser(string infile, string outfile);
 
-    static void SFdecompresser(string infile, string outfile);
+    SFTree();
+
+    ~SFTree();
+
+    void SFcompresser(string infile, string outfile);
+
+    void SFdecompresser(string infile, string outfile);
 };
 
 #endif

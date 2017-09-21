@@ -7,6 +7,7 @@
 using namespace std;
 
 void print_help(const string &exec) {
+
     cerr << "Usage:" << endl <<
          exec << " arg1 inputfile outputfile method" << endl <<
          "arg1 :" << endl <<
@@ -24,6 +25,10 @@ void print_help(const string &exec) {
 int main(int argc, char **argv) {
 
 
+    HTree huff;
+    SFTree sf;
+
+
     if (argc != 5 && argc != 4 || (string(argv[1]) == "-help")) {
 
         print_help(argv[0]);
@@ -33,11 +38,11 @@ int main(int argc, char **argv) {
 
             if (string(argv[1]) == "-c") {
                 cout << "Compressing...(Huffman)" << endl;
-                HTree::Hcompresser(argv[2], argv[3]);
+                huff.Hcompresser(argv[2], argv[3]);
                 print_stats(string(argv[3]), string(argv[2]));
             } else if (string(argv[1]) == "-x") {
                 cout << "Extracting...(Huffman)" << endl;
-                HTree::Hdecompresser(argv[2], argv[3]);
+                huff.Hdecompresser(argv[2], argv[3]);
             } else {
                 cout << "Incorrect arguments...exiting" << endl;
                 exit(-4);
@@ -45,11 +50,11 @@ int main(int argc, char **argv) {
         } else if (string(argv[4]) == "sf") {
             if (string(argv[1]) == "-c") {
                 cout << "Compressing...(Shannon Fano)" << endl;
-                SFTree::SFcompresser(argv[2], argv[3]);
+                sf.SFcompresser(argv[2], argv[3]);
                 print_stats(string(argv[3]), string(argv[2]));
             } else if (string(argv[1]) == "-x") {
                 cout << "Extracting...(Shannon Fano)" << endl;
-                SFTree::SFdecompresser(argv[2], argv[3]);
+                sf.SFdecompresser(argv[2], argv[3]);
             } else {
                 cout << "Incorrect arguments...exiting" << endl;
                 exit(-4);
@@ -63,11 +68,11 @@ int main(int argc, char **argv) {
     } else if (argc == 4) {
         if (string(argv[1]) == "-c") {
             cout << "Compressing...(Huffman)" << endl;
-            HTree::Hcompresser(argv[2], argv[3]);
+            huff.Hcompresser(argv[2], argv[3]);
             print_stats(string(argv[3]), string(argv[2]));
         } else if (string(argv[1]) == "-x") {
             cout << "Extracting...(Huffman)" << endl;
-            HTree::Hdecompresser(argv[2], argv[3]);
+            huff.Hdecompresser(argv[2], argv[3]);
         } else {
             cout << "Incorrect arguments...exiting" << endl;
             exit(-4);
